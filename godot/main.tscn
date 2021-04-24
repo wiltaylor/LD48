@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://level/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://level/LevelGenerator.tscn" type="PackedScene" id=3]
+
+[node name="Level" type="Node2D"]
+
+[node name="Player" parent="." groups=[
+"player",
+] instance=ExtResource( 2 )]
+position = Vector2( 87.4532, 229.144 )
+
+[node name="LevelGenerator" parent="." instance=ExtResource( 3 )]
+LevelParts = [ ExtResource( 3 ) ]
