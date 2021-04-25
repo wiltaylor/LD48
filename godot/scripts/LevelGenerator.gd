@@ -11,9 +11,12 @@ export var LevelWidthInBlocks = 40
 export var LevelIndex = 0
 export var LevelOffsetX: int = 0
 export var LeveloffsetY: int = 300
+export var leftDrop = -20
+export var rightdrop = 20
 
 var noise = OpenSimplexNoise.new()
 var levelPart = load("res://level/LevelFlat1.tscn")
+var levelPartGap = load("res://level/LevelGap.tscn")
 var player
 var currentLoaded = []
 
@@ -25,6 +28,12 @@ func _ready():
 	player = get_tree().get_nodes_in_group("player")[0]
 
 
+func getPart(x):
+	if x == leftDrop || x == rightdrop:
+		return levelPartGap.instance()
+		
+	return levelPart.instance()
+
 func GetBlock(x):
 	for b in currentLoaded:
 		if b.x == x:
@@ -32,14 +41,16 @@ func GetBlock(x):
 		if b.x > LevelOffsetX + LevelWidthInBlocks:
 			b.obj.queue_free()
 			currentLoaded.erase(b)
-			print("die")
 		if b.x < LevelOffsetX - LevelWidthInBlocks:
 			b.obj.queue_free()
 			currentLoaded.erase(b)
-			print("death")
+
 		
-	var d = levelPart.instance()
-	d.transform.origin = Vector2(x * LevelBlockWidth + LevelOffsetX, LeveloffsetY)
+	var d = getPart(x)
+	
+	if d is StaticBody2D:
+		d.transform.origin = Vector2(x * LevelBlockWidth + LevelOffsetX, LeveloffsetY)
+		
 	var blk = BlockData.new()
 	blk.obj = d
 	blk.x = x
